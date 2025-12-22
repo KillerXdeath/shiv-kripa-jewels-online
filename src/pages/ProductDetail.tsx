@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ChevronLeft, Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Minus, Plus, ShoppingBag, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { products } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useToast } from '@/hooks/use-toast';
@@ -251,33 +252,158 @@ const ProductDetail: React.FC = () => {
           </div>
         </section>
 
-        {/* Related Products */}
+        {/* Product Details Tabs */}
         <section className="container mx-auto px-4 py-16">
-          <h2 className="font-display text-2xl font-bold text-foreground mb-8">You May Also Like</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {products
-              .filter((p) => p.id !== product.id && p.category === product.category)
-              .slice(0, 4)
-              .map((relatedProduct) => (
-                <Link
-                  key={relatedProduct.id}
-                  to={`/product/${relatedProduct.id}`}
-                  className="group"
-                >
-                  <div className="aspect-square bg-muted rounded-lg overflow-hidden border border-border group-hover:border-gold/50 transition-all duration-300">
-                    <img
-                      src={relatedProduct.image}
-                      alt={relatedProduct.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
+          <Tabs defaultValue="description" className="w-full">
+            <TabsList className="w-full justify-center bg-transparent border-b border-border rounded-none h-auto p-0 gap-8">
+              <TabsTrigger 
+                value="description" 
+                className="bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent rounded-none px-4 py-3 font-display text-lg data-[state=active]:shadow-none"
+              >
+                Description
+              </TabsTrigger>
+              <TabsTrigger 
+                value="price-breakup" 
+                className="bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent rounded-none px-4 py-3 font-display text-lg data-[state=active]:shadow-none"
+              >
+                Price Breakup
+              </TabsTrigger>
+              <TabsTrigger 
+                value="shipping" 
+                className="bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent rounded-none px-4 py-3 font-display text-lg data-[state=active]:shadow-none"
+              >
+                Shipping
+              </TabsTrigger>
+              <TabsTrigger 
+                value="return" 
+                className="bg-transparent border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent rounded-none px-4 py-3 font-display text-lg data-[state=active]:shadow-none"
+              >
+                Return
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="description" className="pt-8">
+              <div className="max-w-3xl">
+                <ul className="space-y-2 text-foreground font-body">
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
+                    Gold
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
+                    22k
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
+                    Net Weight 54.806 grams
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
+                    Gross Weight 60.6 grams
+                  </li>
+                </ul>
+
+                <h3 className="font-display text-xl font-semibold text-foreground mt-8 mb-4">Stones Used</h3>
+                <ul className="space-y-2 text-foreground font-body">
+                  <li className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
+                    Mix Colour Stone : 28.97ct
+                  </li>
+                </ul>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="price-breakup" className="pt-8">
+              <div className="max-w-3xl">
+                <div className="space-y-4">
+                  <div className="flex justify-between py-3 border-b border-border">
+                    <span className="text-muted-foreground">Gold Weight (22k)</span>
+                    <span className="text-foreground font-medium">54.806 grams</span>
                   </div>
-                  <h3 className="mt-3 font-display text-sm font-medium text-foreground group-hover:text-gold transition-colors">
-                    {relatedProduct.name}
-                  </h3>
-                  <p className="text-gold font-semibold">{formatPrice(relatedProduct.price)}</p>
-                </Link>
-              ))}
-          </div>
+                  <div className="flex justify-between py-3 border-b border-border">
+                    <span className="text-muted-foreground">Gold Rate (per gram)</span>
+                    <span className="text-foreground font-medium">{formatPrice(7500)}</span>
+                  </div>
+                  <div className="flex justify-between py-3 border-b border-border">
+                    <span className="text-muted-foreground">Gold Value</span>
+                    <span className="text-foreground font-medium">{formatPrice(411045)}</span>
+                  </div>
+                  <div className="flex justify-between py-3 border-b border-border">
+                    <span className="text-muted-foreground">Stone Charges</span>
+                    <span className="text-foreground font-medium">{formatPrice(28970)}</span>
+                  </div>
+                  <div className="flex justify-between py-3 border-b border-border">
+                    <span className="text-muted-foreground">Making Charges</span>
+                    <span className="text-foreground font-medium">{formatPrice(45000)}</span>
+                  </div>
+                  <div className="flex justify-between py-3 border-b border-border">
+                    <span className="text-muted-foreground">GST (3%)</span>
+                    <span className="text-foreground font-medium">{formatPrice(14550)}</span>
+                  </div>
+                  <div className="flex justify-between py-4 border-t-2 border-gold">
+                    <span className="text-foreground font-display font-bold text-lg">Total</span>
+                    <span className="text-gold font-display font-bold text-lg">{formatPrice(product.price)}</span>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="shipping" className="pt-8">
+              <div className="max-w-3xl space-y-4">
+                <h3 className="font-display text-xl font-semibold text-foreground mb-4">Shipping Information</h3>
+                <ul className="space-y-3 text-foreground font-body">
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Free shipping on all orders above ₹50,000
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Delivery within 5-7 business days across India
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Secure and insured shipping with tracking
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    International shipping available (additional charges apply)
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Tamper-proof packaging for complete safety
+                  </li>
+                </ul>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="return" className="pt-8">
+              <div className="max-w-3xl space-y-4">
+                <h3 className="font-display text-xl font-semibold text-foreground mb-4">Return Policy</h3>
+                <ul className="space-y-3 text-foreground font-body">
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    7-day easy return policy
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Product must be unused and in original packaging
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Full refund will be processed within 7-10 business days
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Exchange available for different sizes or designs
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 bg-foreground rounded-full mt-2"></span>
+                    Contact customer support for return pickup
+                  </li>
+                </ul>
+              </div>
+            </TabsContent>
+          </Tabs>
         </section>
       </main>
 
