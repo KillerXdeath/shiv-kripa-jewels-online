@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import ProductCard from './ProductCard';
-import { products, categories } from '@/data/products';
+import { products, categories, materials } from '@/data/products';
 import { Button } from './ui/button';
 
 const ProductGrid: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedMaterial, setSelectedMaterial] = useState('All');
 
-  const filteredProducts = selectedCategory === 'All'
-    ? products
-    : products.filter(product => product.category === selectedCategory);
+  const filteredProducts = products.filter(product => {
+    const categoryMatch = selectedCategory === 'All' || product.category === selectedCategory;
+    const materialMatch = selectedMaterial === 'All' || product.material === selectedMaterial;
+    return categoryMatch && materialMatch;
+  });
 
   return (
     <section id="collections" className="py-20 bg-background">
@@ -25,6 +28,21 @@ const ProductGrid: React.FC = () => {
             Each piece is meticulously crafted by our master artisans, 
             blending traditional techniques with contemporary designs.
           </p>
+        </div>
+
+        {/* Material Filter */}
+        <div className="flex flex-wrap justify-center gap-3 mb-6">
+          {materials.map((material) => (
+            <Button
+              key={material}
+              variant={selectedMaterial === material ? 'gold' : 'outline'}
+              size="sm"
+              onClick={() => setSelectedMaterial(material)}
+              className="min-w-[90px]"
+            >
+              {material}
+            </Button>
+          ))}
         </div>
 
         {/* Category Filter */}
@@ -59,7 +77,7 @@ const ProductGrid: React.FC = () => {
         {filteredProducts.length === 0 && (
           <div className="text-center py-16">
             <p className="font-elegant text-xl text-muted-foreground">
-              No products found in this category.
+              No products found with the selected filters.
             </p>
           </div>
         )}
