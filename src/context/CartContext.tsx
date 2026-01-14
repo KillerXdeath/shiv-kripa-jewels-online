@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
+export interface ProductSpecs {
+  goldPurity: string;
+  netWeight: number;
+  grossWeight: number;
+  stonesUsed?: { name: string; weight: string }[];
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -8,6 +15,7 @@ export interface Product {
   category: string;
   material: string;
   description: string;
+  specs: ProductSpecs;
 }
 
 export interface CartItem extends Product {
