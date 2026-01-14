@@ -287,29 +287,35 @@ const ProductDetail: React.FC = () => {
                 <ul className="space-y-2 text-foreground font-body">
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
-                    Gold
+                    {product.material}
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
-                    22k
+                    {product.specs.goldPurity}
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
-                    Net Weight 54.806 grams
+                    Net Weight {product.specs.netWeight} grams
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
-                    Gross Weight 60.6 grams
+                    Gross Weight {product.specs.grossWeight} grams
                   </li>
                 </ul>
 
-                <h3 className="font-display text-xl font-semibold text-foreground mt-8 mb-4">Stones Used</h3>
-                <ul className="space-y-2 text-foreground font-body">
-                  <li className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
-                    Mix Colour Stone : 28.97ct
-                  </li>
-                </ul>
+                {product.specs.stonesUsed && product.specs.stonesUsed.length > 0 && (
+                  <>
+                    <h3 className="font-display text-xl font-semibold text-foreground mt-8 mb-4">Stones Used</h3>
+                    <ul className="space-y-2 text-foreground font-body">
+                      {product.specs.stonesUsed.map((stone, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 bg-foreground rounded-full"></span>
+                          {stone.name} : {stone.weight}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
               </div>
             </TabsContent>
 
@@ -317,8 +323,8 @@ const ProductDetail: React.FC = () => {
               <div className="max-w-3xl">
                 <div className="space-y-4">
                   <div className="flex justify-between py-3 border-b border-border">
-                    <span className="text-muted-foreground">Gold Weight (22k)</span>
-                    <span className="text-foreground font-medium">54.806 grams</span>
+                    <span className="text-muted-foreground">Gold Weight ({product.specs.goldPurity})</span>
+                    <span className="text-foreground font-medium">{product.specs.netWeight} grams</span>
                   </div>
                   <div className="flex justify-between py-3 border-b border-border">
                     <span className="text-muted-foreground">Gold Rate (per gram)</span>
@@ -326,19 +332,21 @@ const ProductDetail: React.FC = () => {
                   </div>
                   <div className="flex justify-between py-3 border-b border-border">
                     <span className="text-muted-foreground">Gold Value</span>
-                    <span className="text-foreground font-medium">{formatPrice(411045)}</span>
+                    <span className="text-foreground font-medium">{formatPrice(product.specs.netWeight * 7500)}</span>
                   </div>
-                  <div className="flex justify-between py-3 border-b border-border">
-                    <span className="text-muted-foreground">Stone Charges</span>
-                    <span className="text-foreground font-medium">{formatPrice(28970)}</span>
-                  </div>
+                  {product.specs.stonesUsed && product.specs.stonesUsed.length > 0 && (
+                    <div className="flex justify-between py-3 border-b border-border">
+                      <span className="text-muted-foreground">Stone Charges</span>
+                      <span className="text-foreground font-medium">{formatPrice(Math.round(product.price * 0.1))}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between py-3 border-b border-border">
                     <span className="text-muted-foreground">Making Charges</span>
-                    <span className="text-foreground font-medium">{formatPrice(45000)}</span>
+                    <span className="text-foreground font-medium">{formatPrice(Math.round(product.price * 0.12))}</span>
                   </div>
                   <div className="flex justify-between py-3 border-b border-border">
                     <span className="text-muted-foreground">GST (3%)</span>
-                    <span className="text-foreground font-medium">{formatPrice(14550)}</span>
+                    <span className="text-foreground font-medium">{formatPrice(Math.round(product.price * 0.03))}</span>
                   </div>
                   <div className="flex justify-between py-4 border-t-2 border-gold">
                     <span className="text-foreground font-display font-bold text-lg">Total</span>
