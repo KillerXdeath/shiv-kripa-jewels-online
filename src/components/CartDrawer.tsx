@@ -1,5 +1,6 @@
 import React from 'react';
-import { X, Plus, Minus, ShoppingBag, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Plus, Minus, ShoppingBag, Trash2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useCart } from '@/context/CartContext';
 import {
@@ -10,6 +11,7 @@ import {
 } from './ui/sheet';
 
 const CartDrawer: React.FC = () => {
+  const navigate = useNavigate();
   const {
     items,
     removeFromCart,
@@ -19,6 +21,11 @@ const CartDrawer: React.FC = () => {
     isCartOpen,
     setIsCartOpen,
   } = useCart();
+
+  const handleCheckout = () => {
+    setIsCartOpen(false);
+    navigate('/checkout');
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -142,7 +149,7 @@ const CartDrawer: React.FC = () => {
 
                 {/* Actions */}
                 <div className="space-y-3">
-                  <Button variant="gold" className="w-full" size="lg">
+                  <Button variant="gold" className="w-full" size="lg" onClick={handleCheckout}>
                     Proceed to Checkout
                   </Button>
                   <div className="flex gap-3">
